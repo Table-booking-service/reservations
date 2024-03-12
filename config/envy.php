@@ -6,11 +6,11 @@ return [
 
     /*
      * Here, you should include any environment files that you want to keep
-     * in sync. For most projects, the `.env.example` file will suffice.
+     * in sync. For most projects, the `.env` file will suffice.
      * However, you're free to include more as your project requires.
      */
     'environment_files' => [
-        base_path('.env.example'),
+        base_path('.env'),
     ],
 
     /**

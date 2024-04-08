@@ -1,4 +1,4 @@
-# Reservstions Service
+# Reservations Service
 
 
 ### Основная функция: бронирование столиков

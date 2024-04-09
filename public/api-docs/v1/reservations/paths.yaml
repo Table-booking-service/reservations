@@ -12,6 +12,7 @@ Status:
         name: time
         required: true
         description: Время, на которое проверяются статусы бронирования
+        allowReserved: true
         schema:
           type: string
           format: date-time

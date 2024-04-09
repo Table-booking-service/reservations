@@ -1,0 +1,34 @@
+Reservation:
+    type: object
+    properties:
+        table_id:
+            type: integer
+            description: ID столика
+            example: 1
+        client_id:
+            type: integer
+            description: ID клиента
+            example: 1
+        reservation_time:
+            type: string
+            description: Время бронирования
+            example: "2020-01-01T14:00:00Z"
+        duration:
+            type: integer
+            description: Длительность бронирования
+            example: 30
+    required:
+        - table_id
+        - client_id
+        - reservation_time
+        - duration
+
+StatusResponse:
+    type: object
+    properties:
+        data:
+            type: array
+            items:
+                $ref: '#/Reservation'
+    required:
+        - data

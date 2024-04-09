@@ -1,0 +1,81 @@
+Status:
+  get:
+    tags:
+      - reservations
+    operationId: getStatus
+    x-lg-handler: 'App\Http\ApiV1\Modules\Reservations\Controllers\ReservationsController@getStatus'
+    x-lg-skip-request-generation: true
+    summary: Получение статусов бронирования
+    description: Получение информации о статусах бронирования всех столиков
+    parameters:
+      - in: query
+        name: time
+        description: Время, на которое проверяются статусы бронирования
+        schema:
+          type: string
+          format: date-time
+          default: "2000-01-01T00:00:00Z"
+    responses:
+      "200":
+        description: Статусы бронирования столиков получены
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/reservations.yaml#/StatusResponse'
+      "404":
+        $ref: '../index.yaml#/components/responses/NotFound'
+      "500":
+        $ref: '../index.yaml#/components/responses/ServerError'
+
+Reservation:
+  post:
+    tags:
+      - reservations
+    operationId: createReservation
+    x-lg-handler: 'App\Http\ApiV1\Modules\Reservations\Controllers\ReservationsController@createReservation'
+    summary: Бронирование столика
+    description: Бронирование выбранного столика на выбранный промежуток времени
+    requestBody:
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: './schemas/reservations.yaml#/Reservation'
+    responses:
+      "200":
+        description: Столик успешно забронирован
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/reservations.yaml#/Reservation'
+      "404":
+        $ref: '../index.yaml#/components/responses/NotFound'
+      "500":
+        $ref: '../index.yaml#/components/responses/ServerError'
+
+DeleteReservation:
+  delete:
+    tags:
+      - reservations
+    operationId: deleteReservation
+    x-lg-handler: 'App\Http\ApiV1\Modules\Reservations\Controllers\ReservationsController@deleteReservation'
+    summary: Отмена бронирования столика
+    description: Отмена бронирования столика
+    parameters:
+      - in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+          minimum: 1
+    responses:
+      "200":
+        description: Бронирование столика успешно отменено
+        content:
+          application/json:
+            schema:
+              $ref: './schemas/reservations.yaml#/Reservation'
+      "404":
+        $ref: '../index.yaml#/components/responses/NotFound'
+      "500":
+        $ref: '../index.yaml#/components/responses/ServerError'

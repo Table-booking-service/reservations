@@ -2,10 +2,14 @@
     "name": "laravel/laravel",
     "type": "project",
     "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "keywords": [
+        "framework",
+        "laravel"
+    ],
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ext-openssl": "*",
         "ackintosh/ganesha": "^3.1",
         "doctrine/dbal": "^3.1",
         "ensi/guzzle-multibyte": "^0.1.0",
@@ -19,7 +23,7 @@
         "ensi/laravel-serve-stoplight": "^0.1.4",
         "ensi/laravel-stdout-logs-helper": "^0.2.0",
         "ensi/octane-swoole-urgent-starter": "^2.0",
-        "guzzlehttp/guzzle": "^7.2",
+        "guzzlehttp/guzzle": "^7.8",
         "laravel/framework": "^10.0",
         "laravel/octane": "^2.0",
         "laravel/tinker": "^2.7",

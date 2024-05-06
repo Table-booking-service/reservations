@@ -8,6 +8,7 @@ use App\Http\ApiV1\Modules\Reservations\Resources\ReservationsResource;
 use App\Http\ApiV1\Modules\Reservations\Resources\StatusServiceResource;
 use DateTime;
 use DateTimeInterface;
+use GuzzleHttp\Client;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
@@ -36,6 +37,15 @@ class ReservationsController
         )->count()) {
             abort(400, 'Reservation overlaps with another reservation.');
         }
+
+        /*
+        if (!in_array($request->input('table_id'), array_column($this->getTablesList(), 'id'))) {
+            abort(400, 'No such table.');
+        }
+        if (!in_array(self::$request->input('client_id'), array_column($this->getClientsList(), 'id'))) {
+            abort(400, 'No such client.');
+        }
+        */
 
         $reservation = new Reservation();
         $reservation->table_id = $request->input('table_id');
@@ -79,6 +89,49 @@ class ReservationsController
                 });
             })
             ->get();
+    }
+
+    private function getXApiSecret(): string
+    {
+        if (!config('x_api_secret', false)) {
+            $data = env('X_API_SECRET_DATA');
+            $algorithm = env('X_API_SECRET_ALGORITHM');
+            $key = env('X_API_SECRET_KEY');
+
+            config()->set('x_api_secret', openssl_encrypt($data, $algorithm, $key, 0, str_repeat("0", 16)));
+        }
+
+        return config('x_api_secret');
+    }
+
+    private function getTablesList(): array
+    {
+        if (!config('x_api_client', false)) {
+            $client = new Client(['headers' => ['X-Api-Secret' => $this->getXApiSecret()]]);
+            config()->set('x_api_client', $client);
+        }
+
+        $client = config('x_api_client');
+        /** @noinspection PhpUnhandledExceptionInspection */
+        /** @noinspection HttpUrlsUsage */
+        $result = $client->get('http://' . env("TABLES_SERVICE_IP") . '/api/v1/tables');
+
+        return json_decode($result->getBody()->getContents());
+    }
+
+    private function getClientsList(): array
+    {
+        if (!config('x_api_client', false)) {
+            $client = new Client(['headers' => ['X-Api-Secret' => $this->getXApiSecret()]]);
+            config()->set('x_api_client', $client);
+        }
+
+        $client = config('x_api_client');
+        /** @noinspection PhpUnhandledExceptionInspection */
+        /** @noinspection HttpUrlsUsage */
+        $result = $client->get('http://' . env("CLIENTS_SERVICE_IP") . '/api/v1/clients');
+
+        return json_decode($result->getBody()->getContents());
     }
 }
 

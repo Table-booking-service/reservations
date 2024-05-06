@@ -15,7 +15,7 @@ class ReservationsResource extends BaseJsonResource
         return [
             'table_id' => $this->table_id,
             'client_id' => $this->client_id,
-            'reservation_time' => $this->reservation_time,
+            'reservation_start' => $this->reservation_start,
             'duration' => $this->duration,
         ];
     }

@@ -9,7 +9,7 @@ Status:
     description: Получение информации о статусах бронирования всех столиков
     parameters:
       - in: query
-        name: time
+        name: reservation_start
         required: true
         description: Время, на которое проверяются статусы бронирования
         allowReserved: true

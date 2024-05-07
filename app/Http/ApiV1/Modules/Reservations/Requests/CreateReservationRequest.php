@@ -10,7 +10,7 @@ class CreateReservationRequest extends BaseFormRequest
     {
         return [
             'duration' => ['required', 'integer'],
-            'reservation_time' => ['required', 'string'],
+            'reservation_start' => ['required', 'string'],
             'client_id' => ['required', 'integer'],
             'table_id' => ['required', 'integer'],
         ];

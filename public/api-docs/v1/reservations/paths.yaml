@@ -1,3 +1,24 @@
+TablesList:
+  get:
+    tags:
+      - reservations
+    operationId: getTablesList
+    x-lg-handler: 'App\Http\ApiV1\Modules\Reservations\Controllers\ReservationsController@getTablesList'
+    x-lg-skip-request-generation: true
+    summary: Получение списка столов
+    description: Получение списка всех доступных столов
+    responses:
+      "200":
+        description: Успешно получен список столов
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: './schemas/reservations.yaml#/Reservation'
+      "500":
+        $ref: '../index.yaml#/components/responses/ServerError'
+
 Status:
   get:
     tags:
@@ -6,10 +27,10 @@ Status:
     x-lg-handler: 'App\Http\ApiV1\Modules\Reservations\Controllers\ReservationsController@getStatus'
     x-lg-skip-request-generation: true
     summary: Получение статусов бронирования
-    description: Получение информации о статусах бронирования всех столиков
+    description: Получение информации о статусах бронирования всех столиков на указанный момент времени
     parameters:
       - in: query
-        name: time
+        name: reservation_start
         required: true
         description: Время, на которое проверяются статусы бронирования
         allowReserved: true
@@ -37,6 +58,8 @@ Reservation:
     x-lg-handler: 'App\Http\ApiV1\Modules\Reservations\Controllers\ReservationsController@createReservation'
     summary: Бронирование столика
     description: Бронирование выбранного столика на выбранный промежуток времени
+    security:
+      - cookieAuth: [ ]               # disable to test ==========================================
     requestBody:
       required: true
       content:
@@ -44,12 +67,16 @@ Reservation:
           schema:
             $ref: './schemas/reservations.yaml#/Reservation'
     responses:
-      "200":
+      "201":
         description: Столик успешно забронирован
         content:
           application/json:
             schema:
               $ref: './schemas/reservations.yaml#/Reservation'
+      "400":
+        $ref: '../index.yaml#/components/responses/BadRequest'
+      "401":
+        $ref: '../index.yaml#/components/responses/Unauthorized'
       "404":
         $ref: '../index.yaml#/components/responses/NotFound'
       "500":
@@ -63,6 +90,8 @@ DeleteReservation:
     x-lg-handler: 'App\Http\ApiV1\Modules\Reservations\Controllers\ReservationsController@deleteReservation'
     summary: Отмена бронирования столика
     description: Отмена бронирования столика
+    #    security:
+    #      - cookieAuth: [ ]               # disable to test ==========================================
     parameters:
       - in: path
         name: id
@@ -76,8 +105,9 @@ DeleteReservation:
         content:
           application/json:
             schema:
-              $ref: './schemas/reservations.yaml#/Reservation'
-      "404":
-        $ref: '../index.yaml#/components/responses/NotFound'
+              data: null
+      "401":
+        $ref: '../index.yaml#/components/responses/Unauthorized'
       "500":
         $ref: '../index.yaml#/components/responses/ServerError'
+

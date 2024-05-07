@@ -1,12 +1,20 @@
 {
-   "private": true,
-   "devDependencies": {
-      "@openapitools/openapi-generator-cli": "^2.1.15",
-      "@stoplight/spectral-cli": "^6.6.0",
-      "chokidar": "^3.5.3",
-      "chokidar-cli": "^3.0.0"
-   },
-   "scripts": {
-      "spectral": "spectral lint ./public/api-docs/**/index.yaml"
-   }
+    "private": true,
+    "devDependencies": {
+        "@openapitools/openapi-generator-cli": "^2.1.15",
+        "@stoplight/spectral-cli": "^6.6.0",
+        "browser-sync": "^2.29.3",
+        "browser-sync-webpack-plugin": "^2.3.0",
+        "chokidar": "^3.5.3",
+        "chokidar-cli": "^3.0.0",
+        "laravel-mix": "^6.0.49",
+        "webpack": "^5.91.0"
+    },
+    "scripts": {
+        "spectral": "spectral lint ./public/api-docs/**/index.yaml",
+        "watch": "mix watch"
+    },
+    "dependencies": {
+        "refs": "^0.9.7"
+    }
 }

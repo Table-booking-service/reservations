@@ -8,6 +8,7 @@
 use App\Http\ApiV1\Modules\Reservations\Controllers\ReservationsController;
 use Illuminate\Support\Facades\Route;
 
+Route::get('tables', [ReservationsController::class, 'getTablesList']);
 Route::get('tables/status', [ReservationsController::class, 'getStatus']);
 Route::post('reservations', [ReservationsController::class, 'createReservation']);
 Route::delete('reservations/{id}', [ReservationsController::class, 'deleteReservation']);

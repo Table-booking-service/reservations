@@ -9,7 +9,7 @@ Reservation:
             type: integer
             description: ID клиента
             example: 1
-        reservation_time:
+        reservation_start:
             type: string
             description: Время бронирования
             example: "2020-01-01T14:00:00Z"
@@ -20,7 +20,7 @@ Reservation:
     required:
         - table_id
         - client_id
-        - reservation_time
+        - reservation_start
         - duration
 
 StatusResponse:

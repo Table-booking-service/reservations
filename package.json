@@ -13,5 +13,8 @@
     "scripts": {
         "spectral": "spectral lint ./public/api-docs/**/index.yaml",
         "watch": "mix watch"
+    },
+    "dependencies": {
+        "refs": "^0.9.7"
     }
 }

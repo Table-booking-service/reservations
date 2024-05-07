@@ -15,6 +15,20 @@ use Illuminate\Http\JsonResponse;
 
 class ReservationsController
 {
+    public function getTablesList()
+    {
+        if (!config('x_api_client', false)) {
+            $client = new Client(['headers' => ['X-Api-Secret' => $this->getXApiSecret()]]);
+            config()->set('x_api_client', $client);
+        }
+
+        $client = config('x_api_client');
+
+        /** @noinspection PhpUnhandledExceptionInspection */
+        /** @noinspection HttpUrlsUsage */
+        return $client->get('http://' . env("TABLES_SERVICE_IP") . '/api/v1/tables');
+    }
+
     public function getStatus(): Responsable
     {
         $time = request()->input('reservation_start');
@@ -38,18 +52,37 @@ class ReservationsController
             abort(400, 'Reservation overlaps with another reservation.');
         }
 
+
+        $clientId = $request->input('client_id');
+        //        $token = $request->cookie('token');
+        //        $decodedId = openssl_decrypt(
+        //            $token,
+        //            env('X_API_SECRET_ALGORITHM'),
+        //            env('X_API_SECRET_KEY'),
+        //            0,
+        //            str_repeat("0", 16)
+        //        );
+        //        if (!$token || $decodedId != $clientId) {
+        //            abort(401, $token);
+        //        }
         /*
-        if (!in_array($request->input('table_id'), array_column($this->getTablesList(), 'id'))) {
+        if (!in_array(
+            $request->input('table_id'),
+            array_column(
+                json_decode($this->getTablesList()->getBody()->getContents()),
+                'id'
+            )
+        )) {
             abort(400, 'No such table.');
         }
-        if (!in_array(self::$request->input('client_id'), array_column($this->getClientsList(), 'id'))) {
+        if (!in_array($clientId, array_column($this->getClientsList(), 'id'))) {
             abort(400, 'No such client.');
         }
         */
 
         $reservation = new Reservation();
         $reservation->table_id = $request->input('table_id');
-        $reservation->client_id = $request->input('client_id');
+        $reservation->client_id = $clientId;
         $reservation->reservation_start = $request->input('reservation_start');
         $reservation->duration = $request->input('duration');
         /** @noinspection PhpUnhandledExceptionInspection */
@@ -102,21 +135,6 @@ class ReservationsController
         }
 
         return config('x_api_secret');
-    }
-
-    private function getTablesList(): array
-    {
-        if (!config('x_api_client', false)) {
-            $client = new Client(['headers' => ['X-Api-Secret' => $this->getXApiSecret()]]);
-            config()->set('x_api_client', $client);
-        }
-
-        $client = config('x_api_client');
-        /** @noinspection PhpUnhandledExceptionInspection */
-        /** @noinspection HttpUrlsUsage */
-        $result = $client->get('http://' . env("TABLES_SERVICE_IP") . '/api/v1/tables');
-
-        return json_decode($result->getBody()->getContents());
     }
 
     private function getClientsList(): array

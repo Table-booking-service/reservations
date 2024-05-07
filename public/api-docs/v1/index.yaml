@@ -12,6 +12,8 @@ tags:
   - name: reservations
     description: Бронирование
 paths:
+  /tables:
+    $ref: './reservations/paths.yaml#/TablesList'
   /tables/status:
     $ref: './reservations/paths.yaml#/Status'
   /reservations:
@@ -19,6 +21,13 @@ paths:
   /reservations/{id}:
     $ref: './reservations/paths.yaml#/DeleteReservation'
 components:
+  securitySchemes:
+    cookieAuth:
+      description: Токен для проверки авторизации
+      type: apiKey
+      in: cookie
+      name: token
+      # example: ATAkNyqT7/uFFsw3GDRlRg==
   parameters:
     QueryInclude:
       $ref: './common_parameters.yaml#/QueryInclude'
@@ -34,24 +43,30 @@ components:
         meta:
           type: object
       required:
-          - data
+        - data
     PaginationTypeEnum:
       $ref: './common_schemas.yaml#/PaginationTypeEnum'
   responses:
     BadRequest:
-      description: Bad Request
+      description: Ошибка в запросе
+      content:
+        application/json:
+          schema:
+            $ref: './errors.yaml#/ErrorResponse'
+    Unauthorized:
+      description: Не авторизован
       content:
         application/json:
           schema:
             $ref: './errors.yaml#/ErrorResponse'
     NotFound:
-      description: Not Found
+      description: Не найдено
       content:
         application/json:
           schema:
             $ref: './errors.yaml#/ErrorResponse'
     ServerError:
-      description: Internal Server Error
+      description: Ошибка на стороне сервера
       content:
         application/json:
           schema:

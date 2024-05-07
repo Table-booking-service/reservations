@@ -67,7 +67,7 @@ Reservation:
           schema:
             $ref: './schemas/reservations.yaml#/Reservation'
     responses:
-      "200":
+      "201":
         description: Столик успешно забронирован
         content:
           application/json:
@@ -90,8 +90,8 @@ DeleteReservation:
     x-lg-handler: 'App\Http\ApiV1\Modules\Reservations\Controllers\ReservationsController@deleteReservation'
     summary: Отмена бронирования столика
     description: Отмена бронирования столика
-    security:
-      - cookieAuth: [ ]               # disable to test ==========================================
+    #    security:
+    #      - cookieAuth: [ ]               # disable to test ==========================================
     parameters:
       - in: path
         name: id
@@ -105,11 +105,9 @@ DeleteReservation:
         content:
           application/json:
             schema:
-              $ref: './schemas/reservations.yaml#/Reservation'
+              data: null
       "401":
         $ref: '../index.yaml#/components/responses/Unauthorized'
-      "404":
-        $ref: '../index.yaml#/components/responses/NotFound'
       "500":
         $ref: '../index.yaml#/components/responses/ServerError'
 

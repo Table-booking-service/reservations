@@ -2,6 +2,7 @@
 
 namespace App\Domain\Reservations\Models;
 
+use App\Domain\Reservations\Models\Tests\Factories\ReservationsFactory;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -21,4 +22,9 @@ class Reservation extends Model
     protected $fillable = [
         'table_id', 'client_id', 'reservation_start', 'duration',
     ];
+
+    public static function factory(): ReservationsFactory
+    {
+        return ReservationsFactory::new();
+    }
 }

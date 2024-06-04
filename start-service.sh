@@ -22,7 +22,7 @@ docker run -d \
 
 # Run the application container
 docker run -d \
-  --pull \
+  --pull missing \
   --name app \
   --network reservations-network \
   -p ${APP_PORT}:80 \

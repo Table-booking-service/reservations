@@ -6,9 +6,14 @@ export FORWARD_DB_PORT=5433
 export DB_DATABASE=reservationsdb
 export DB_USERNAME=reservationsuser
 export DB_PASSWORD=password
+export TABLES_SERVICE_IP=1.1.1.1
+export CLIENTS_SERVICE_IP=1.1.1.1
 
 # Create a network for the containers
 docker network create reservations-network
+
+docker stop app postgres
+docker rm app postgres
 
 # Run the PostgreSQL container
 docker run -d \

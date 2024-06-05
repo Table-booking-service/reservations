@@ -54,22 +54,22 @@ class ReservationsController
 
 
         $clientId = $request->input('client_id');
-        //        $token = $request->cookie('token');
-        //        $decodedId = openssl_decrypt(
-        //            $token,
-        //            env('X_API_SECRET_ALGORITHM'),
-        //            env('X_API_SECRET_KEY'),
-        //            0,
-        //            str_repeat("0", 16)
-        //        );
-        //        if (!$token || $decodedId != $clientId) {
-        //            abort(401, $token);
-        //        }
-        /*
+        $token = $request->cookie('token');
+        $decodedId = openssl_decrypt(
+            $token,
+            env('X_API_SECRET_ALGORITHM'),
+            env('X_API_SECRET_KEY'),
+            0,
+            str_repeat("0", 16)
+        );
+        if (!$token || $decodedId != $clientId) {
+            abort(401, $token);
+        }
+
         if (!in_array(
             $request->input('table_id'),
             array_column(
-                json_decode($this->getTablesList()->getBody()->getContents()),
+                json_decode($this->getTablesList()->getBody()->getContents(), true)["data"],
                 'id'
             )
         )) {
@@ -78,7 +78,7 @@ class ReservationsController
         if (!in_array($clientId, array_column($this->getClientsList(), 'id'))) {
             abort(400, 'No such client.');
         }
-        */
+
 
         $reservation = new Reservation();
         $reservation->table_id = $request->input('table_id');
@@ -149,7 +149,7 @@ class ReservationsController
         /** @noinspection HttpUrlsUsage */
         $result = $client->get('http://' . env("CLIENTS_SERVICE_IP") . '/api/v1/clients');
 
-        return json_decode($result->getBody()->getContents());
+        return json_decode($result->getBody()->getContents(), true)['data'];
     }
 }
 

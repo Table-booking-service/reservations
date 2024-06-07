@@ -63,7 +63,6 @@ class ReservationsController
         }
 
 
-
         $clientId = $request->input('client_id');
         $token = $request->cookie('token');
         $decodedId = openssl_decrypt(
@@ -172,11 +171,11 @@ class ReservationsController
         Log::channel()->info("Requesting clients list from: " . env("CLIENTS_SERVICE_IP"));
         /** @noinspection PhpUnhandledExceptionInspection */
         /** @noinspection HttpUrlsUsage */
-        $result = $client->get('http://' . env("CLIENTS_SERVICE_IP") . '/api/v1/clients');
+        $result = json_decode($client->get('http://' . env("CLIENTS_SERVICE_IP") . '/api/v1/clients')->getBody()->getContents(), true)['data'];
 
-        Log::channel()->info("Got clients list, count: " . count(json_decode($result->getBody()->getContents(), true)['data']));
+        Log::channel()->info("Got clients list, count: " . count($result));
 
-        return json_decode($result->getBody()->getContents(), true)['data'];
+        return $result;
     }
 }
 
